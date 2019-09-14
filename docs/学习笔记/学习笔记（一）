@@ -1,0 +1,78 @@
+0、用vue-cli脚手架工具创建一个vue工程项目：
+1）全局安装vue-cli：npm i vue-cli -g （一开始按照官网命令行下载最新版本老是安装报错，所以就下载这个版本）
+2）创建一个基于webpack模板的新项目：vue init webpack my-project （可以创建一个空文件夹然后终端进入，不然终端就得定位到要创建的文件路径）（unit跟e2e选no）
+3）安装依赖：    cd my-project
+                npm i
+4）启动该项目：npm run dev
+
+1、以.vue结尾的文件是一个单文件组件，
+由<template></template>、<script></script>、<style></style>三大部分组成，
+分别编写html模板代码、js逻辑层代码、css样式代码
+
+2、路由可以理解为让不同的网址访问展示不同的内容
+<router-view />作用：展示当前路由的内容
+
+3、windows系统下，终端输入命令：ipconfig   可以查看自己电脑的ip地址
+
+4、
+main.js是vue项目的入口文件
+router路由配置不同的网址访问到不同的页面
+.vue是单页面组件
+
+5、@表示src目录，所以src下的router文件夹路径可以写成：@/router
+
+6、.vue单文件组件的框架：
+<template>
+<div>
+
+</div>
+</template>
+
+<script>
+export default {
+    name: "",
+    data () {
+        return {
+
+        }
+    },
+}
+</script>
+
+<!--添加“scoped”属性以仅将CSS限制为此组件，即在其他地方引入组件时，各个样式不会被继承从而不会相互影响到-->
+<style scoped>
+
+</style>
+
+7、<a href="#" target="_blank"></a> 意思是在新的页面窗口打开一个超链接
+
+8、vue中一些奇怪的报错提醒：
+预计缩进2个空格但找到0
+字符串必须使用单引号
+文件末尾需要换行但未找到
+额外的分号
+
+9、解决移动端网页样式显示问题（几个文件可以作为收藏方便以后使用）：
+1）由于移动端网页在不同手机会展现出不同的css样式效果，所以我们需要引入reset.css文件对
+样式进行统一，由此来实现让所有浏览器显示的效果是一样的
+import '@/assets/styles/reset.css' // 引入reset.css统一不同用户的显示样式效果
+
+2）正常来讲，我们的1px通常就表示1物理像素，但是在分别率比较高的屏幕上，例如2倍屏则会变成
+2个物理像素，3倍屏则会变成3个物理像素，为了解决这个问题，我们引入border.css解决这个问题，
+让所有设备1px就是显示1个物理像素
+由于里面设置好了，所以我们可以用 .1em 代替 1px，.1em就是实现了1px的效果，且是1个物理像素
+import '@/assets/styles/border.css' // 引入border.css解决1px在不同分辨率屏幕下不同大小像素边框的问题
+
+3）由于移动端app在一些机型上会有300ms点击延迟，这样会给用于带来不好的体验，用npm下载fastclick
+包：在该项目的终端下: npm i fastclick --save (--save表示该包在开发环境以及上线生产环境中都需要)
+import FastClick from 'fastclick' // 引入fastclick包解决部分设备点击响应300ms延迟问题
+FastClick.attach(document.body)
+
+引入相应文件后项目不报错即引入成功
+
+10、在项目n终端下：npm run start/dev  即可启动该项目，
+启动后便可用localhost:8080/电脑的ip地址:8080访问
+（用ip地址访问的话需要在package.json配置文件中配置--host 0.0.0.0；
+同时电脑跟手机在同一局域网内时该手机也可以通过电脑的ip地址:8080访问进行访问）
+
+注：windows系统下，终端输入命令：ipconfig   可以查看自己电脑的ip地址

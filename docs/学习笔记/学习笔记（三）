@@ -1,0 +1,138 @@
+1、如何为stylus样式创建全局变量：
+1）在src/assets/styles创建一个varibles.styl文件，并定义：
+$bgColor = #00bcd4 // 全局背景色
+2）在组件（header.vue）的styles标签里引用：
+@import '../../../src/assets/styles/varibles.styl'
+若要使用@别称代表src目录：
+@import '~@/assets/styles/varibles.styl' // 在css文件中引入其他css时，路径中若要引用别称，则前面要加~
+
+2、vue项目如何定义别称：
+1）打开/build/webpack.base.conf.js配置文件，在下面的代码中像定义src别称那样定义别称
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+  }
+2）由于修改了配置文件，所以得在终端重启我们的项目
+
+3、web移动端app如何使用swiper轮播图：
+1）打开github，搜索“vue-awesome-swiper”，选择“surmon-china/vue-awesome-swiper”，查看使用文档
+2）在终端输入命令下载vue-awesome-swiper包：npm install vue-awesome-swiper --save
+3）在入口文件main.js中引用该包：
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
+Vue.use(VueAwesomeSwiper, /* { default global options } */)
+4）然后就可以在组件模板里使用该轮播图组件包了：
+<!-- The ref attr used to find the swiper instance -->
+<template>
+  <swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">
+    <!-- slides -->
+    <swiper-slide>I'm Slide 1</swiper-slide>
+    <swiper-slide>I'm Slide 2</swiper-slide>
+    <swiper-slide>I'm Slide 3</swiper-slide>
+    <swiper-slide>I'm Slide 4</swiper-slide>
+    <swiper-slide>I'm Slide 5</swiper-slide>
+    <swiper-slide>I'm Slide 6</swiper-slide>
+    <swiper-slide>I'm Slide 7</swiper-slide>
+    <!-- Optional controls -->
+    <div class="swiper-pagination"  slot="pagination"></div>
+    <div class="swiper-button-prev" slot="button-prev"></div>
+    <div class="swiper-button-next" slot="button-next"></div>
+    <div class="swiper-scrollbar"   slot="scrollbar"></div>
+  </swiper>
+</template>
+
+<script>
+  export default {
+    name: 'carrousel',
+    data() {
+      return {
+        swiperOption: {
+          // some swiper options/callbacks
+          // 所有的参数同 swiper 官方 api 参数
+          // ...
+        }
+      }
+    },
+    computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper
+      }
+    },
+    mounted() {
+      // current swiper instance
+      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
+      console.log('this is current swiper instance object', this.swiper)
+      this.swiper.slideTo(3, 1000, false)
+    }
+  }
+</script>
+
+！！！注意：swiper组件的name属性指不能和组件名同名，否则会出现
+Uncaught RangeError: Maximum call stack size exceeded的问题!!!
+
+4、
+1）npm安装依赖
+【npm install xxx】利用 npm 安装xxx依赖到当前命令行所在目录
+【npm install xxx -g】利用npm安装全局依赖xxx
+【npm install xxx –save】 安装并写入package.json的”dependencies”中
+【npm install xxx –save-dev】安装并写入package.json的”devDependencies”中
+
+2）npm删除依赖
+【npm uninstall xxx】删除xxx依赖
+【npm uninstall xxx -g】删除全局依赖xxx
+
+5、对img标签设置100%可以让图片宽度与设备宽度一致且全完整显示
+
+6、
+<style lang="stylus" scoped>
+  img
+    width: 100% // 让图片100%且全屏显示
+    // height: rem
+</style>
+
+加scoped的意思是让这里的样式只对该组件的template里的选择器有影响，而即使有相同类名也穿透不了
+
+但轮播图的轮播点是由swiper的.swiper-pagination-bullet-active类的background-color决定的，
+但.swiper-pagination-bullet-active类在导入到swiper组件中，所以这是我们应该用stylus的样式
+穿透来实现这对.swiper-pagination-bullet-active类的background-color的设置:
+.wrapper >>> .swiper-pagination
+  
+
+7、设置图片在不同移动设备的响应式
+1）不要设置图片的height，只设置图片width: 100%，这样会让图片按照原来比例去铺满宽度
+  img
+    width: 100% // 让图片100%且全屏显示
+2）不要设置高度也可以，它就是按原图笔记，但用vw为单位设置高度更灵活一点，可以设置高宽比来显示图片高度;
+且网速慢图片还没加出来时，由于先设置好了空间也不会有页面抖动的效果
+  img
+    width: 100%
+    height: 80vw 
+    // 不要设置高度也可以，它就是按原图笔记，但用vw为单位设置高度更灵活一点，可以设置高宽比来显示图片高度
+    // 且网速慢图片还没加出来时，由于先设置好了空间也不会有页面抖动的效果
+3）利用.wrapper和img样式的结合实现与上面2）一样的效果，但是兼容性更好一点
+  // 轮播图容器
+  .wrapper
+    overflow: hidden
+    width: 100%
+    height: 0
+    padding-bottom: 80%
+  // 轮播图样式
+  img 
+    width: 100%
+
+！！这一段可以记住，用来设置一个容器，解决页面抖动问题，且可以灵活设置区域的大小！！
+.wrapper
+    overflow: hidden
+    width: 100%
+    height: 0
+    padding-bottom: 80%
+
+给容器设置这么一段代码的主要目的是为了解决页面抖动的问题，因为我们的容器div一般是默认width为100%，
+而高是自适应的，也就是由内容区撑起来的，内容区总高是多少，那么底层容器的高就是多少；
+但这样的缺点就是当网速慢若图片等容器内的元素加载较慢出来时，页面会有抖动的情况；
+所以我们就将这个底层容器的宽高先分配一个空间，即给固定了，但由于考虑设备自适应的兼容性问题，
+所以综合就像上面这样写是比较好的做法
+
+8、h5移动端app响应式开发中，图片、容器大小宽高等用vw，距离、字体大小等用.rem

@@ -1,0 +1,68 @@
+1、ajax之axios，强大的阿贾克斯请求工具，既可以在前端发送请求，也可以在服务器端发送http请求
+使用axios：
+1）安装：npm i axios --save
+2）在要使用的组件文件import引入axios模块即可
+import axios from 'axios'
+
+2、发送axios请求后端API请求，并转接为调用本地static/mock/index.json数据，模拟后端数据
+1）调用API接口：
+methods: {
+    // 发送axios get请求api获取后端的home页面的数据
+    getHomeInfo () {
+      axios.get('/api/index.json')
+      // 由于现在没有后端api，所以利用 配置文件，将以api开头的接口访问到转接到本地的static静态文件
+        .then(res => {
+          console.log(res);
+        })
+    }
+  },
+  // 生命周期函数——页面挂载完成执行函数，即页面还没显示出来前执行
+  mounted () {
+    this.getHomeInfo();
+  }
+}
+2）3）4）5）为转接到本地，模拟后端数据：
+2）创建static/mock/index.json文件
+3）在.gitignore文件里忽略该文件
+static/mock
+4）在config/index.js配置文件里添加：
+proxyTable: {
+      // ajax请求的api若以'/api'开头，则将'/api'替换成'/static/mock'，在本地模拟后端数据
+      '/api': {
+        target: 'http://localhost:8080',
+        pathRewrite: {
+          '^/api': '/static/mock'
+        }
+      }
+    },
+5）由于修改了配置文件，所以得在终端重启一下项目
+
+3、父组件向子组件传递参数：
+1）在Home.vue组件的data(){return{}}里定义：city: ''
+2）将city数据绑定到home-header标签里：
+<home-header :city="city"></home-header>
+3）在Header.vue子组件里接收父组件传过来的参数：
+props: { city: String }
+4）就可以在该组件里利用属性绑定将数据用到组件里
+<p>{{ city }}</p>
+
+4、浮动float和绝对定位absolute一起设置了，这个可不可以呢？答案是不可以的，因为对同一个盒子设置
+绝对定位和浮动时，绝对定位会使浮动属性失效，所以当一个盒子已经进行了浮动，就不要再对其进行绝对定
+位了，选择的时候一定要注意。
+
+5、position的属性值有：
+1）absolute：绝对定位，是相对于最近的且不是static定位的父元素来定位
+2）relative：相对定位，是相对于其原本的位置来定位的
+3）fixed：绝对定位，是相对于浏览器窗口来定位的，是固定的，不会跟屏幕一起滚动
+4）static：默认值，没有定位
+5）inherit：继承父元素的position值
+
+6、font-size设置字体大小
+
+7、使用float脱离文档流时，其他盒子会无视这个元素，但其他盒子内的文本依然会为这个元素让出位置，环绕在周围。 
+而对于使用absolute :position脱离文档流的元素，其他盒子与其他盒子内的文本都会无视它。
+float、relative不完全脱离文档流，absolute是完全脱离文档流
+
+8、background-color: rgba(0, 0, 0, 0.7)
+// 设置banner-desc部分为黑色渐变
+    background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8))

@@ -1,0 +1,59 @@
+1、vscode如何断点调试vue项目：
+1）在vscode商店安装Debugger for Chrome插件
+2）点击调试小爬虫，生成“launch.json”文件，并对其进行配置：
+{
+  // 使用 IntelliSense 了解相关属性。 
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "调试vue项目", 
+      "type": "chrome", 
+      "request": "launch",
+      "url": "http://localhost:8080/",
+      "webRoot": "${workspaceRoot}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}\\dev"
+    }
+  ]
+}
+3）终端启动该项目：npm run dev
+4）设置断点，按f5或者点击小爬虫处的三角形进行调试，弹出浏览器运行页面即为成功
+5）浏览器页面加载完成后会停在断点处，左侧可观察变量、堆栈等
+
+2、在.vue组件里引入图片的3种方法：
+1）直接将图片地址（本地地址或者是httpurl地址）写在img标签的src属性值
+   <img alt="爱奇艺图片" src="../../images/iqiyi.png" />
+2）利用数据绑定，将src进行数据绑定，从data(){ return {} } 里取数据
+  2.1）图片链接为httpsurl地址：
+    <img :alt="item.imgAlt" :src="item.imgUrl" />
+      imgAlt: '爱奇艺',
+      imgUrl: 'https://img1.qunarzz.com/order/comp/1805/2e/6e407f088bfb902.png'
+  2.2）图片在本地文件夹里：
+    <img :alt="item.imgAlt" :src="item.imgUrl" />
+      imgAlt: '爱奇艺',
+      imgUrl: require('@/assets/images/iqiyi.png')
+3）img图片挡在模拟后端数据的/static/mock/index.json文件中时，格式得为json，前面1）2）两种方法都不能用
+解决方法：将图片放在/static/mock/images静态文件夹中，通过"图片地址引用"
+因为static里的数据才可以被外界访问到
+  
+总结，即当src采用数据绑定从data里取数据，且该图片在本地时应该用
+imgUrl: require('@/assets/images/iqiyi.png')，imgUrl: 而不能直接用'@/assets/images/iqiyi.png'
+
+3、vw就是viewwidth即视图容器宽度，即屏幕宽度
+50vw即屏幕宽度的50%
+
+4、设置了swiper轮播图底层容器大小后，若里面内容总空间超出了swiper底层容器空间，那么则会报错：
+[Vue warn]: Error in render: "TypeError: Cannot read property 'id' of undefined"
+挂钩错误：“TypeError：无法读取未定义的属性'slideClass'”
+
+5、计算属性，用于计算，自带缓存机制，若值没有被修改则不会重新计算，且在缓存中，调用快，性能高
+  写法是把要计算的属性在computed里定义成一个函数，并把计算结果return出去，在外面把这个在
+  computed里的这个函数当属性用，即调用时不用加()
+
+6、若要让容器下面有一个1像素边框，只要使用stylus引入的.border-bottom类即可

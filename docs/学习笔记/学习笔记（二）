@@ -1,0 +1,83 @@
+1、1em = 16px,(自适应)，px固定单位
+1rem = html font size 50px（自适应，且50这个值可以自己设置，一般是根据不同设备js自行改变以实现响应式）; 
+1rem = 10rpx;
+iphone6中：2rpx = 1px  
+
+设计图尺寸一般是rpx单位，调试窗口显示的是px
+在移动端开发中为了适应不同设备像素边框大小问题，所以我们只能用rem
+
+设计师给的iphone6的尺寸是rpx，即2倍尺寸，即若宽是86rpx，那么则是43px，
+在移动端样式中，我们一般采用rem单位，根据换算，1rpx = 1/100rem = 0.01rem
+所以按照设计师给的iphone6的尺寸/100就是rem大小
+
+2、使用css的辅助工具stylus预处理器进行开发，
+1）npm i stylus --save 下载stylus包
+2）npm i stylus-loader --save 下载stylus-loader包
+//3）在webpack.base.conf.js文件，在其中的rules写入配置：
+//      {
+//        test: /\.css$/,
+//        loader: 'style-loader!css-loader!stylus-loader'
+//      }
+注意，修改了配置文件，项目记得在终端重启
+3）<style  lang="stylus" scoped>
+   </style>
+
+3、使用iconfont阿里巴巴图标库：
+1）登录iconfont网站后创建项目，进入图标库 -> 官方图标 -> 大麦网
+2）选择想要的图标后加入购物车，全部挑选后从购物车里添加到项目里
+3）下载到本地，选择文件中除了iconfont.js的其他所有iconfont.文件；
+将它们放到 @/assets/styles/iconfont/ 文件夹下；
+4）在入口文件main.js中引入iconfont.css
+import '@/assets/styles/iconfont/iconfont.css' // 引入iconfont图标css样式
+
+到这里若没有报错就说明引入成功了，接下来就是在页面使用这些图标了
+
+5）<div class="iconfont 其他类名">这里是从iconfont网站复制来的图标代码代号</div>
+并且用font-size设置其大小
+
+4、input文本框内添加提示文字，填写内容时消失：用placeholder属性作为提示语
+<input placeholder="提示语..."></input>
+
+5、input框插入图片的两种方法
+
+6、border-radius:9px; 让输入框变成圆角
+text-indent:20px; 文本缩进
+
+7、flex: 1 / flex: 0 0 300px; 等，flex用于将剩余空间撑开，用于响应式开发，详见阮一峰老师flex教程
+
+8、解决h5移动端网页开发响应式布局（rem自适应自设置单位代替px固定单位 + flex布局（flex：1是关键））：
+1）在项目的骨架文件index.html文件中
+    <meta 
+        name="viewport" 
+        content="width=device-width,
+                initial-scale=1.0,
+                minimum-scale=1.0,
+                maximum-scale=1.0,
+                user-scalable=no"
+    >
+2）import '@/assets/styles/border.css' 
+// 引入border.css解决1px在不同分辨率屏幕下不同大小像素边框的问题，该css文件可收藏起来
+// 将px按照html font size设定好的px大小换算成rem单位，同时js会根据屏幕大小将这个html font size
+进行调整，以实现rem单位长度的响应式
+3）利用flex布局实现布局的响应式：
+在样式中，如果是header这种左中右架构，可以固定左右的为固定宽度，让中间为flex: 1，
+即让中间部分撑开占满剩余空间，同时在设置里面的input框也是flex: 1，这样输入框就是
+响应式撑开占满剩余空间；同时rem也会随屏幕的变化而变化
+
+总结：rem单位响应式 + flex布局响应式
+
+9、如何关闭vue-cli脚手架的烦人提示：
+1)在/config/index.js中将notifyOnErrors属性值由true设置为false;
+notifyOnErrors: true,
+2)在终端重启该项目
+
+10、如何取消vue-cli脚手架初始化项目的严格模式：
+在严格模式下会报各种语法格式错误，eg：
+Expect to indent 2 spaces but find 0 // 预计缩进2个空格但找到0
+String must use single quotes // 字符串必须使用单引号
+Need to wrap at the end of the file but not found // 文件末尾需要换行但未找到
+Extra semicolon // 额外的分号
+解决方法：
+1）在/static/.gitigonore配置文件里添加上一句：
+src/*（即scr目录下所有文件）
+2）在终端重启该项目
